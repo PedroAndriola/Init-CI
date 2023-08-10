@@ -1,29 +1,26 @@
-go# This is a basic workflow to help you get started with Actions
-
 name: Init-CI
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "master" ]
+    branches:
+      - master
   pull_request:
-    branches: [ "master" ]
+    branches:
+      - master
 
-  
 jobs:
   Test:
     runs-on: ubuntu-latest
     strategy:
-    matrix:
-      go_version: ['1.17', '1.18', '>=1.18']
+      matrix:
+        go_version: ['1.17', '1.18', '>=1.18']
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v2
         with:
-        go_version: ${{ matrix.go_version }}
+          go-version: ${{ matrix.go_version }}
         
       - name: Build-DB
         run: docker-compose build
@@ -33,12 +30,12 @@ jobs:
         
       - name: Test
         run: go test -v main_test.go
-        
-    build:
-      runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@v3
+
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
       - name: Build
         run: go build -v main.go
-        
+
         
