@@ -1,6 +1,6 @@
 go# This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Init-CI
 
 # Controls when the workflow will run
 on:
@@ -12,21 +12,18 @@ on:
 
   
 jobs:
-  # This workflow contains a single job called "build"
   Test:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    strategy:
+    matrix:
+      go_version: ['1.17', '1.18', '>=1.18']
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.19
+        go_version: ${{ matrix.go_version }}
         
       - name: Build-DB
         run: docker-compose build
@@ -45,4 +42,3 @@ jobs:
         run: go build -v main.go
         
         
-
